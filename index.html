@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000000">
+<title>Ultra Clicker — Скачать</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #00f0ff;
+    --red-line: #ff3b3b;
+    --text-main: #ffffff;
+    --text-muted: #a0a0b0;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Rajdhani', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: #000000;
+    color: var(--text-main);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Плавающие точки на фоне */
+  #dot-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* СТАТУС-БАР СВЕРХУ */
+  .status-bar {
+    position: fixed;
+    top: 0; left: 0; width: 100%;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 100;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+  .status-left { display: flex; align-items: center; gap: 8px; color: var(--accent); font-weight: 700; }
+  .status-right { display: flex; gap: 15px; }
+  .status-right a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+  .status-right a:hover { color: #fff; }
+
+  /* ГЛАВНЫЙ ЭКРАН */
+  .hero {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 20px 40px 20px;
+    position: relative;
+    z-index: 10;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* ЛЕВАЯ ЧАСТЬ (ПРОСТО ТЕКСТ СЛЕВА) */
+  .text-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+
+  .main-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 3.5rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    line-height: 1.1;
+    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+    margin-bottom: 15px;
+  }
+
+  /* КРАСНАЯ ЛИНИЯ */
+  .red-line {
+    width: 100%;
+    max-width: 400px;
+    height: 4px;
+    background-color: var(--red-line);
+    border-radius: 2px;
+    box-shadow: 0 0 15px rgba(255, 59, 59, 0.6);
+    margin-bottom: 15px;
+  }
+
+  .sub-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #ffffff;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  /* КНОПКА */
+  .download-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 260px;
+    padding: 20px;
+    background: #ffffff;
+    color: #000;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  }
+  .download-btn:active { transform: scale(0.95); background: #ddd; }
+  
+  .size-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    opacity: 0.6;
+    margin-top: 4px;
+  }
+
+  /* ОПИСАНИЕ И FAQ */
+  .content-sections {
+    position: relative;
+    z-index: 10;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding-bottom: 80px;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    color: #fff;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .section-title::before { content: '// '; color: var(--red-line); }
+
+  .desc-text { font-size: 1.05rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px; }
+  
+  .features-list {
+    list-style: none;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .features-list li { margin-bottom: 12px; font-size: 1rem; color: #ddd; }
+  .features-list li::before { content: '•'; color: var(--red-line); margin-right: 10px; font-weight: bold; }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .faq-question {
+    padding: 16px 20px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+  }
+  .faq-answer {
+    max-height: 0;
+    padding: 0 20px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    opacity: 0;
+  }
+  .faq-item.open .faq-answer { max-height: 200px; padding: 0 20px 16px 20px; opacity: 1; }
+  .faq-item.open .faq-question span { transform: rotate(45deg); }
+  .faq-question span { transition: transform 0.3s; color: var(--red-line); font-weight: 900; }
+
+  .footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.3);
+    padding: 30px 0;
+    position: relative;
+    z-index: 10;
+  }
+  .footer a { color: #fff; text-decoration: none; border-bottom: 1px solid var(--red-line); }
+
+  @media (max-width: 600px) {
+    .main-title { font-size: 2.5rem; }
+    .sub-title { font-size: 1.2rem; }
+    .download-btn { width: 100%; max-width: 300px; }
+  }
+</style>
+</head>
+<body>
+
+  <canvas id="dot-canvas"></canvas>
+
+  <div class="status-bar">
+    <div class="status-left"><span>🟢</span> ONLINE</div>
+    <div class="status-right">
+      <a href="#about">Описание</a>
+      <a href="#faq">FAQ</a>
+    </div>
+  </div>
+
+  <section class="hero" id="home">
+    
+    <!-- ЛЕВАЯ ЧАСТЬ: ТЕКСТ, ЛИНИЯ И ПОДЗАГОЛОВОК -->
+    <div class="text-block">
+      <div class="main-title">Ultra Clicker</div>
+      <div class="red-line"></div>
+      <div class="sub-title">Энергия. Клик. Скорость</div>
+    </div>
+
+    <!-- КНОПКА СКАЧИВАНИЯ -->
+    <a href="ultraclicker.apk" class="download-btn" download>
+      Скачать игру
+      <span class="size-text">(6,17 МБ)</span>
+    </a>
+  </section>
+
+  <div class="content-sections">
+    <section class="section" id="about">
+      <h2 class="section-title">Описание</h2>
+      <p class="desc-text">Ultra Clicker — это кибернетический симулятор, где каждое твое касание генерирует энергию. Погрузись в неоновый мир!</p>
+      <ul class="features-list">
+        <li>Неоновая графика</li>
+        <li>Пассивный доход</li>
+        <li>Критические удары (x10)</li>
+        <li>Вибрация</li>
+        <li>Автосохранение</li>
+      </ul>
+    </section>
+
+    <section class="section" id="faq">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-item">
+        <div class="faq-question">Как установить игру? <span>+</span></div>
+        <div class="faq-answer">Скачай файл по кнопке выше. Открой его и разреши установку из неизвестных источников.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Игра бесплатная? <span>+</span></div>
+        <div class="faq-answer">Да, абсолютно. В ней нет скрытых платежей.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer">
+    Сделано с душой • <a href="https://www.tiktok.com/@technology_1488" target="_blank">@technology_1488</a>
+  </div>
+
+<script>
+  // FAQ
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
+    item.querySelector('.faq-question').addEventListener('click', () => {
+      faqItems.forEach(i => { if(i !== item) i.classList.remove('open'); });
+      item.classList.toggle('open');
+    });
+  });
+
+  // Плавающие белые точки
+  const canvas = document.getElementById('dot-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height, particles = [];
+
+  function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  class Dot {
+    constructor() {
+      this.x = Math.random() * width; this.y = Math.random() * height;
+      this.size = Math.random() * 2 + 1;
+      this.speedX = (Math.random() - 0.5) * 0.5; this.speedY = (Math.random() - 0.5) * 0.5;
+      this.opacity = Math.random() * 0.5 + 0.1;
+    }
+    update() {
+      this.x += this.speedX; this.y += this.speedY;
+      if (this.x < 0) this.x = width; if (this.x > width) this.x = 0;
+      if (this.y < 0) this.y = height; if (this.y > height) this.y = 0;
+    }
+    draw() {
+      ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+      ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 100; i++) particles.push(new Dot());
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+</body>
+</html>
